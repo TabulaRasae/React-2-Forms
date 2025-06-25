@@ -13,11 +13,13 @@ const App = () => {
   ];
   const [books, setBooks] = useState(initialBooksState);
 
-  const appendBook = (newBookTitle) => {
+  const appendBook = (newBookTitle, newBookAuthor, isRead, isFavorite) => {
     const newBook = {
       id: books.length + 1,
       title: newBookTitle,
-      author: newBookAuthor
+      author: newBookAuthor,
+      isRead: isRead,
+      isFavorite: isFavorite
     };
     setBooks([...books, newBook]);
   };
@@ -27,9 +29,9 @@ const App = () => {
       <AddBook appendBook={appendBook} />
       {/* <BookList /> */}
       {books.map((book) => (
-        <li key={book.id}>{book.title}{book.author}</li>
+        <li key={book.id}>{book.title} by {book.author} - {book.isRead ? "Read" : "Unread"} - {book.isFavorite ? "Favorite" : "Not Favorite"}</li>
       ))}
-      
+
     </div>
   );
 };

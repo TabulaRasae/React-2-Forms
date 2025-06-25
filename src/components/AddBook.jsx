@@ -19,12 +19,15 @@ const AddBook = ({ appendBook }) => {
   const [author, setAuthor] = useState("")
   const [titleErrors, setTitleErrors] = useState([]);
   const [authorErrors, setAuthorErrors] = useState([]);
+  const [image, setImage] = useState("");
   const [dirty, setDirty] = useState(false);
+  const [isRead, setIsRead] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false)
 
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("title", title);
-    appendBook(title);
+    appendBook(title, author, isRead, isFavorite);
     clearForm();
   };
 
@@ -50,9 +53,34 @@ const AddBook = ({ appendBook }) => {
     }
   };
 
+    const handleImageChange = (event) => {
+    setDirty(true);
+    // Let's make sure the Image has at least some characters in it
+    setImage(event.target.value);
+    if (image.length < 4) {
+      setImageErrors(["Image must be valid"]);
+    } else {
+      setImageErrors([]);
+    }
+  };
+
+  const handleReadClick = () => {
+    setIsRead(!isRead);
+  }
+
+  const handleFavoriteClick = () => {
+    setIsFavorite(!isFavorite);
+  }
+
   const clearForm = () => {
     setTitle("");
+    setAuthor("");
+    setAuthorErrors([]);
+    setImage("");
+
   };
+
+
 
   return (
     <form onSubmit={handleSubmit} className="new-book-form">
@@ -72,12 +100,37 @@ const AddBook = ({ appendBook }) => {
         value={author}
         onChange={handleAuthorChange}
       />
+      <input
+        name="img"
+        type="url"
+        placeholder="Image URL"
+        value={image}
+        onChange={handleImageChange}
+      />
+
       {titleErrors.map((error) => (
         <p className="error" key={error}>
           {error}
         </p>
       ))}
       <button disabled={titleErrors.length > 0 || !dirty}>Create Book</button>
+      
+      <label className="label">
+        <input
+          name="read"
+          type="checkbox"
+          onChange={handleReadClick}
+        />
+        read
+      </label>
+      <label className="label">
+        <input
+          name="favorite"
+          type="checkbox"
+          onChange={handleFavoriteClick}
+        />
+        favorite
+      </label>
     </form>
   );
 };
