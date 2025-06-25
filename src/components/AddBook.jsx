@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import "../style.css";
 
 /**
  * A book should have the following fields:
@@ -13,8 +14,51 @@ import React from "react";
  * - isFavorite (boolean, default false)
  */
 
-const AddBook = () => {
-  return <div>AddBook</div>;
+const AddBook = ({ appendBook }) => {
+  const [title, setTitle] = useState("");
+  const [titleErrors, setTitleErrors] = useState([]);
+  const [dirty, setDirty] = useState(false);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("title", title);
+    appendBook(title);
+    clearForm();
+  };
+
+  const handleTitleChange = (event) => {
+    setDirty(true);
+    // Let's make sure the title has at least 4 characters in it
+    setTitle(event.target.value);
+    if (title.length < 4) {
+      setTitleErrors(["title must have at least 4 characters"]);
+    } else {
+      setTitleErrors([]);
+    }
+  };
+
+  const clearForm = () => {
+    setTitle("");
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="new-book-form">
+      <input
+        name="title"
+        type="text"
+        required
+        placeholder="Title"
+        value={title}
+        onChange={handleTitleChange}
+      />
+      {titleErrors.map((error) => (
+        <p className="error" key={error}>
+          {error}
+        </p>
+      ))}
+      <button disabled={titleErrors.length > 0 || !dirty}>Create Book</button>
+    </form>
+  );
 };
 
 export default AddBook;
