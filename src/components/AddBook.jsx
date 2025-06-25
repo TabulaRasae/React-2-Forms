@@ -23,11 +23,12 @@ const AddBook = ({ appendBook }) => {
   const [dirty, setDirty] = useState(false);
   const [isRead, setIsRead] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false)
+  const [rating, setRating] = useState(1);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("title", title);
-    appendBook(title, author, isRead, isFavorite);
+    appendBook(title, author, isRead, isFavorite, rating);
     clearForm();
   };
 
@@ -107,14 +108,27 @@ const AddBook = ({ appendBook }) => {
         value={image}
         onChange={handleImageChange}
       />
-
-      {titleErrors.map((error) => (
-        <p className="error" key={error}>
-          {error}
-        </p>
-      ))}
-      <button disabled={titleErrors.length > 0 || !dirty}>Create Book</button>
-      
+      <select
+        name="rating"
+        type="number"
+        min="1"
+        max="5"
+        placeholder="Rating (1-5)"
+        onChange={(e) => {
+          setDirty(true);
+          const value = parseInt(e.target.value, 10);
+          if (value >= 1 && value <= 5) {
+            setRating(value);
+          }
+        }}  
+      >
+        <option value="">Select a rating</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
       <label className="label">
         <input
           name="read"
@@ -131,6 +145,15 @@ const AddBook = ({ appendBook }) => {
         />
         favorite
       </label>
+
+      {titleErrors.map((error) => (
+        <p className="error" key={error}>
+          {error}
+        </p>
+      ))}
+      <button disabled={titleErrors.length > 0 || !dirty}>Create Book</button>
+
+      
     </form>
   );
 };
