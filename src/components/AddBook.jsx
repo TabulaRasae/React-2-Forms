@@ -16,7 +16,9 @@ import "../style.css";
 
 const AddBook = ({ appendBook }) => {
   const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("")
   const [titleErrors, setTitleErrors] = useState([]);
+  const [authorErrors, setAuthorErrors] = useState([]);
   const [dirty, setDirty] = useState(false);
 
   const handleSubmit = (event) => {
@@ -37,6 +39,17 @@ const AddBook = ({ appendBook }) => {
     }
   };
 
+    const handleAuthorChange = (event) => {
+    setDirty(true);
+    // Let's make sure the Author has at least some characters in it
+    setAuthor(event.target.value);
+    if (author.length < 4) {
+      setAuthorErrors(["Author must have at least some characters"]);
+    } else {
+      setAuthorErrors([]);
+    }
+  };
+
   const clearForm = () => {
     setTitle("");
   };
@@ -50,6 +63,14 @@ const AddBook = ({ appendBook }) => {
         placeholder="Title"
         value={title}
         onChange={handleTitleChange}
+      />
+      <input
+        name="author"
+        type="text"
+        required
+        placeholder="Author"
+        value={author}
+        onChange={handleAuthorChange}
       />
       {titleErrors.map((error) => (
         <p className="error" key={error}>
