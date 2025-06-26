@@ -107,7 +107,7 @@ const AddBook = ({ appendBook }) => {
 
       <label className="check">
         <input type="checkbox" checked={form.isFavorite} onChange={onChange("isFavorite")} />
-        Mark as favourite
+        Mark as favorite
       </label>
 
       {Object.values(errors).map((msg) => (
